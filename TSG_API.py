@@ -89,6 +89,23 @@ class TSG_API():
         """Returns Bid,Share-Price & Ask of every 5-Min Tick. Currently limited to the last 1000 entries"""
         return requests.get(self.baseurl + "past/share_price/%s/" % (share_id), headers=self.headers).json()
 
+    def post_order(self, share_id, price, amount, depot):
+        """Posting an order. Needs the share ID, price and the amount of the shares.
+        Don't forget to choose the depot. Privatedepot = true, companydepot = false"""
+        order = {}
+        order["orders_of_share"] = share_id
+        order["price_per_share"] = price
+        order["amount"] = amount
+        order["pd_order"] = depot
+        return requests.post(self.baseurl + "order/buy/", headers = self.headers, json=order)
+
+    def delete_order(self, ID):
+        """Delete an order. Needs the order ID. 
+        You can get the order ID with functions: get_yourSell() and get_yourBuy()"""
+        order = {}
+        order["id"] = ID
+        return requests.delete(self.baseurl + "order/buy/", headers=self.headers, json=order)
+
 def example():
     print "##### Getting TSGIndex-data #####"
     api = TSG_API("YourToken") #Since tsgIndex-data is free to test, you don't need to pass any token
