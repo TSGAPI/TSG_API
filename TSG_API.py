@@ -1,3 +1,4 @@
+from __future__ import print_function
 import requests
 
 class TSG_API():
@@ -107,20 +108,20 @@ class TSG_API():
         return requests.delete(self.baseurl + "order/buy/", headers=self.headers, json=order)
 
 def example():
-    print "##### Getting TSGIndex-data #####"
+    print("##### Getting TSGIndex-data #####")
     api = TSG_API("YourToken") #Since tsgIndex-data is free to test, you don't need to pass any token
     tsgIndex = api.get_tsgIndex()
     for datapoint in tsgIndex:
         s = ""
         for key in tsgIndex[0].iterkeys():
             s = s + "%s:%s " %(key, datapoint[key])
-        print s
+        print(s)
 
 if __name__ == '__main__':
 
-    print "API for thesharegame.com"
-    print "Call help(TSG_API) to get more information about the methods"
-    print 'Call python -c "import TSG_API; TSG_API.example()" to get an example (getting every record in the tsgIndex)'
+    print("API for thesharegame.com")
+    print("Call help(TSG_API) to get more information about the methods")
+    print('Call python -c "import TSG_API; TSG_API.example()" to get an example (getting every record in the tsgIndex)')
     #help(TSG_API)
     #help(TSG_API.get_yourBuy)
-    #example()
+#example()
