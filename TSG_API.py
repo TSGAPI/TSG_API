@@ -14,6 +14,13 @@ class TSG_API():
         self.headers = {"Authorization":"Token %s"%(token)}
         self.baseurl = "https://www.thesharegame.com/api/"
 
+    def get_token(self, username, password):
+        """Returns your token, requires username and password of your TheShareGame-Account!"""
+        account_data = {}
+        account_data["username"] = username
+        account_data["password"] = password
+        return requests.post(self.baseurl + "token/", headers=self.headers, json=account_data).json()
+
     def get_tsgIndex(self):
         """Returns: All Stock-Index Points"""
         return requests.get(self.baseurl + "tsgindex/", headers=self.headers).json()
@@ -66,9 +73,26 @@ class TSG_API():
         """All Bonds"""
         return requests.get(self.baseurl + "bonds/", headers=self.headers).json()
 
+    def post_bond(self, value, runtime, depot):
+        """Buying a new bond. Need the value and runtime of the bond.
+        Don't forget to choose the depot. Privatedepot = true, companydepot = false"""
+        bond = {}
+        bond["value"] = value
+        bond["runtime"] = runtime
+        bond["private_depot"] = depot
+        return requests.post(self.baseurl + "bonds/", headers=self.headers, json=bond)
+
     def get_credits(self):
         """All Credits"""
         return requests.get(self.baseurl + "credits/", headers=self.headers).json()
+
+    def post_credit(self, value, runtime):
+        """Take a credit. Need the value and the runtime of the credit.
+        Runtime can be anything from 1 up to 14"""
+        credit = {}
+        credit["value"] = value
+        credit["runtime"] = runtime
+        return requests.post(self.baseurl + "credits/", headers=self.headers, json=credit)
 
     def get_monthStats(self, share_id):
         """Month Stats of the share by the given id"""
@@ -86,6 +110,7 @@ class TSG_API():
         """Returns all past Data about the Market"""
         return requests.get(self.baseurl + "market/stats/", headers=self.headers).json()
 
+    # Needs rework to handle pagination
     def get_pastSharePrice(self, share_id):
         """Returns Bid,Share-Price & Ask of every 5-Min Tick. Currently limited to the last 1000 entries"""
         return requests.get(self.baseurl + "past/share_price/%s/" % (share_id), headers=self.headers).json()
@@ -116,6 +141,46 @@ class TSG_API():
         order = {}
         order["id"] = ID
         return requests.delete(self.baseurl + "order/buy/", headers=self.headers, json=order)
+
+    def get_marketStatsMonth(self, year, month):
+        """Returns the data about the Market in a specific month"""
+        return requests.get(self.baseurl + "month/stats/mm/%s/yy/%s/" % (month, year), headers=self.headers).json()
+
+    def get_highscoreGrowth(self):
+        """Returns the current growth highscore"""
+        return requests.get(self.baseurl + "highscore/growth/", headers=self.headers).json()
+
+    def get_highscoreSize(self):
+        """Returns the current size highscore"""
+        return requests.get(self.baseurl + "highscore/size/", headers=self.headers).json()
+
+    def get_liquidation(self):
+        """Returns current liquidations"""
+        return requests.get(self.baseurl + "liquidation/", headers=self.headers).json()
+
+    def get_capitalReduction(self):
+        """Returns capital reductions of the past"""
+        return requests.get(self.baseurl + "capital_reduction/", headers=self.headers).json()
+
+    def get_fine(self):
+        """Returns all fines"""
+        return requests.get(self.baseurl + "fine/", headers=self.headers).json()
+
+    def get_compensation(self):
+        """Returns all compensations"""
+        return requests.get(self.baseurl + "compensation/", headers=self.headers).json()
+
+    def get_ban(self):
+        """Returns all bans"""
+        return requests.get(self.baseurl + "ban/", headers=self.headers).json()
+
+    def get_chatBan(self):
+        """Returns all chat bans"""
+        return requests.get(self.baseurl + "chat_ban/", headers=self.headers).json()
+
+    def get_unread(self):
+        """Returns the amount of your unread messages, notifications, forum posts & articles"""
+        return requests.get(self.baseurl + "unread/", headers=self.headers).json()
 
 def example():
     print("##### Getting TSGIndex-data #####")
